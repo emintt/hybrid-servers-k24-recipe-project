@@ -1,5 +1,5 @@
 import {ResultSetHeader, RowDataPacket} from 'mysql2';
-import {MediaItem, TokenContent} from '@sharedTypes/DBTypes';
+import {RecipeItem, TokenContent} from '@sharedTypes/DBTypes';
 import promisePool from '../../lib/db';
 import {fetchData} from '../../lib/functions';
 import {MessageResponse} from '@sharedTypes/MessageTypes';
@@ -11,14 +11,14 @@ import {MessageResponse} from '@sharedTypes/MessageTypes';
  * @throws {Error} - error if database query fails
  */
 
-const fetchAllMedia = async (): Promise<MediaItem[] | null> => {
+const fetchAllRecipe = async (): Promise<RecipeItem[] | null> => {
   const uploadPath = process.env.UPLOAD_URL;
   try {
-    const [rows] = await promisePool.execute<RowDataPacket[] & MediaItem[]>(
+    const [rows] = await promisePool.execute<RowDataPacket[] & RecipeItem[]>(
       `SELECT *,
       CONCAT(?, filename) AS filename,
       CONCAT(?, CONCAT(filename, "-thumb.png")) AS thumbnail
-      FROM MediaItems`,
+      FROM RecipeItems`,
       [uploadPath, uploadPath]
     );
     if (rows.length === 0) {
@@ -26,21 +26,21 @@ const fetchAllMedia = async (): Promise<MediaItem[] | null> => {
     }
     return rows;
   } catch (e) {
-    console.error('fetchAllMedia error', (e as Error).message);
+    console.error('fetchAllRecipe error', (e as Error).message);
     throw new Error((e as Error).message);
   }
 };
 
-const fetchAllMediaByAppId = async (
+const fetchAllRecipeByAppId = async (
   id: string
-): Promise<MediaItem[] | null> => {
+): Promise<RecipeItem[] | null> => {
   const uploadPath = process.env.UPLOAD_URL;
   try {
-    const [rows] = await promisePool.execute<RowDataPacket[] & MediaItem[]>(
+    const [rows] = await promisePool.execute<RowDataPacket[] & RecipeItem[]>(
       `SELECT *,
       CONCAT(?, filename) AS filename,
       CONCAT(?, CONCAT(filename, "-thumb.png")) AS thumbnail
-      FROM MediaItems
+      FROM RecipeItems
       WHERE app_id = ?`,
       [uploadPath, uploadPath, id]
     );
@@ -62,17 +62,17 @@ const fetchAllMediaByAppId = async (
  * @throws {Error} - error if database query fails
  */
 
-const fetchMediaById = async (id: number): Promise<MediaItem | null> => {
+const fetchRecipeById = async (id: number): Promise<RecipeItem | null> => {
   const uploadPath = process.env.UPLOAD_URL;
   try {
     // TODO: replace * with specific column names needed in this case
     const sql = `SELECT *,
                 CONCAT(?, filename) AS filename,
                 CONCAT(?, CONCAT(filename, "-thumb.png")) AS thumbnail
-                FROM MediaItems
+                FROM RecipeItems
                 WHERE media_id=?`;
     const params = [uploadPath, uploadPath, id];
-    const [rows] = await promisePool.execute<RowDataPacket[] & MediaItem[]>(
+    const [rows] = await promisePool.execute<RowDataPacket[] & RecipeItem[]>(
       sql,
       params
     );
@@ -81,7 +81,7 @@ const fetchMediaById = async (id: number): Promise<MediaItem | null> => {
     }
     return rows[0];
   } catch (e) {
-    console.error('fetchMediaById error', (e as Error).message);
+    console.error('fetchRecipeById error', (e as Error).message);
     throw new Error((e as Error).message);
   }
 };
@@ -93,19 +93,22 @@ const fetchMediaById = async (id: number): Promise<MediaItem | null> => {
  * @returns {object} - object containing id of the inserted media item in db
  * @throws {Error} - error if database query fails
  */
-const postMedia = async (
-  media: Omit<MediaItem, 'media_id' | 'created_at'>
-): Promise<MediaItem | null> => {
+const postRecipe = async (
+  media: Omit<RecipeItem, 'recipe_id' | 'created_at'>
+): Promise<RecipeItem | null> => {
   //  filename, filesize, media_type tulee upload media
-  const {user_id, filename, filesize, media_type, title, description} = media;
-  const sql = `INSERT INTO MediaItems (user_id, filename, filesize, media_type, title, description)
-               VALUES (?, ?, ?, ?, ?, ?)`;
-  const params = [user_id, filename, filesize, media_type, title, description];
+  const {user_id, filename, filesize, media_type, title, description,
+    serving, cook_time, ingredients, instruction} = media;
+  const sql = `INSERT INTO RecipeItems (user_id, filename, filesize, media_type, title, description,
+    serving, cook_time, ingredients, instruction)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+  const params = [user_id, filename, filesize, media_type, title, description,
+    serving, cook_time, ingredients, instruction];
   try {
     const result = await promisePool.execute<ResultSetHeader>(sql, params);
     console.log('result', result);
-    const [rows] = await promisePool.execute<RowDataPacket[] & MediaItem[]>(
-      'SELECT * FROM MediaItems WHERE media_id = ?',
+    const [rows] = await promisePool.execute<RowDataPacket[] & RecipeItem[]>(
+      'SELECT * FROM RecipeItems WHERE recipe_id = ?',
       [result[0].insertId]
     );
     if (rows.length === 0) {
@@ -128,11 +131,11 @@ const postMedia = async (
  */
 
 const putMedia = async (
-  media: Pick<MediaItem, 'title' | 'description'>,
+  media: Pick<RecipeItem, 'title' | 'description'>,
   id: number
 ) => {
   try {
-    const sql = promisePool.format('UPDATE MediaItems SET ? WHERE ?', [
+    const sql = promisePool.format('UPDATE RecipeItems SET ? WHERE ?', [
       media,
       id,
     ]);
@@ -153,13 +156,13 @@ const putMedia = async (
  * @throws {Error} - error if database query fails
  */
 
-const deleteMedia = async (
+const deleteRecipe = async (
   id: number,
   user: TokenContent,
   token: string
 ): Promise<MessageResponse> => {
-  console.log('deleteMedia', id);
-  const media = await fetchMediaById(id);
+  console.log('deleteRecipe', id);
+  const media = await fetchRecipeById(id);
   console.log(media);
 
   if (!media) {
@@ -192,7 +195,7 @@ const deleteMedia = async (
 
     // ! user_id in SQL so that only the owner of the media item can delete it
     const [result] = await connection.execute<ResultSetHeader>(
-      'DELETE FROM MediaItems WHERE media_id = ? and user_id = ?;',
+      'DELETE FROM RecipeItems WHERE media_id = ? and user_id = ?;',
       [id, user.user_id]
     );
 
@@ -238,10 +241,10 @@ const deleteMedia = async (
  * @throws {Error} - error if database query fails
  */
 
-const fetchMostLikedMedia = async (): Promise<MediaItem | undefined> => {
+const fetchMostLikedRecipe = async (): Promise<RecipeItem | undefined> => {
   try {
-    const [rows] = await promisePool.execute<RowDataPacket[] & MediaItem[]>(
-      'SELECT * FROM `MostLikedMedia`'
+    const [rows] = await promisePool.execute<RowDataPacket[] & RecipeItem[]>(
+      'SELECT * FROM `MostLikedRecipe`'
     );
     if (rows.length === 0) {
       return undefined;
@@ -249,7 +252,7 @@ const fetchMostLikedMedia = async (): Promise<MediaItem | undefined> => {
     rows[0].filename =
       process.env.MEDIA_SERVER + '/uploads/' + rows[0].filename;
   } catch (e) {
-    console.error('getMostLikedMedia error', (e as Error).message);
+    console.error('getMostLikedRecipe error', (e as Error).message);
     throw new Error((e as Error).message);
   }
 };
@@ -261,10 +264,10 @@ const fetchMostLikedMedia = async (): Promise<MediaItem | undefined> => {
  * @throws {Error} - error if database query fails
  */
 
-const fetchMostCommentedMedia = async (): Promise<MediaItem | undefined> => {
+const fetchMostCommentedRecipe = async (): Promise<RecipeItem | undefined> => {
   try {
-    const [rows] = await promisePool.execute<RowDataPacket[] & MediaItem[]>(
-      'SELECT * FROM `MostCommentedMedia`'
+    const [rows] = await promisePool.execute<RowDataPacket[] & RecipeItem[]>(
+      'SELECT * FROM `MostCommentedRecipe`'
     );
     if (rows.length === 0) {
       return undefined;
@@ -272,7 +275,7 @@ const fetchMostCommentedMedia = async (): Promise<MediaItem | undefined> => {
     rows[0].filename =
       process.env.MEDIA_SERVER + '/uploads/' + rows[0].filename;
   } catch (e) {
-    console.error('getMostCommentedMedia error', (e as Error).message);
+    console.error('getMostCommentedRecipe error', (e as Error).message);
     throw new Error((e as Error).message);
   }
 };
@@ -284,10 +287,10 @@ const fetchMostCommentedMedia = async (): Promise<MediaItem | undefined> => {
  * @throws {Error} - error if database query fails
  */
 
-const fetchHighestRatedMedia = async (): Promise<MediaItem | undefined> => {
+const fetchHighestRatedRecipe = async (): Promise<RecipeItem | undefined> => {
   try {
-    const [rows] = await promisePool.execute<RowDataPacket[] & MediaItem[]>(
-      'SELECT * FROM `HighestRatedMedia`'
+    const [rows] = await promisePool.execute<RowDataPacket[] & RecipeItem[]>(
+      'SELECT * FROM `HighestRatedRecipe`'
     );
     if (rows.length === 0) {
       return undefined;
@@ -296,19 +299,19 @@ const fetchHighestRatedMedia = async (): Promise<MediaItem | undefined> => {
       process.env.MEDIA_SERVER + '/uploads/' + rows[0].filename;
     return rows[0];
   } catch (e) {
-    console.error('getHighestRatedMedia error', (e as Error).message);
+    console.error('getHighestRatedRecipe error', (e as Error).message);
     throw new Error((e as Error).message);
   }
 };
 
 export {
-  fetchAllMedia,
-  fetchAllMediaByAppId,
-  fetchMediaById,
-  postMedia,
-  deleteMedia,
-  fetchMostLikedMedia,
-  fetchMostCommentedMedia,
-  fetchHighestRatedMedia,
+  fetchAllRecipe,
+  fetchAllRecipeByAppId,
+  fetchRecipeById,
+  postRecipe,
+  deleteRecipe,
+  fetchMostLikedRecipe,
+  fetchMostCommentedRecipe,
+  fetchHighestRatedRecipe,
   putMedia,
 };

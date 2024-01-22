@@ -1,4 +1,4 @@
-import { MediaItem, UserWithNoPassword } from './DBTypes';
+import { RecipeItem, UserWithNoPassword } from './DBTypes';
 
 type MessageResponse = {
   message: string;
@@ -8,8 +8,8 @@ type ErrorResponse = MessageResponse & {
   stack?: string;
 };
 
-type MediaResponse = MessageResponse & {
-  media: MediaItem | MediaItem[];
+type RecipeResponse = MessageResponse & {
+  recipe: RecipeItem | RecipeItem[];
 };
 
 // for auth server
@@ -39,7 +39,7 @@ type UploadResponse = MessageResponse & {
 export type {
   MessageResponse,
   ErrorResponse,
-  MediaResponse,
+  RecipeResponse,
   LoginResponse,
   UploadResponse,
   UserResponse,

@@ -12,8 +12,8 @@ type User = {
   created_at: Date | string;
 };
 
-type MediaItem = {
-  media_id: number;
+type RecipeItem = {
+  recipe_id: number;
   user_id: number;
   filename: string;
   thumbnail: string;
@@ -21,6 +21,10 @@ type MediaItem = {
   media_type: string;
   title: string;
   description: string | null;
+  serving: number;
+  cook_time: string;
+  ingredients: string;
+  instruction: string;
   created_at: Date | string;
   app_id: string;
 };
@@ -67,19 +71,19 @@ type UploadResult = {
   };
 };
 
-type MostLikedMedia = Pick<
-  MediaItem,
-  | 'media_id'
-  | 'filename'
-  | 'filesize'
-  | 'media_type'
-  | 'title'
-  | 'description'
-  | 'created_at'
-> &
-  Pick<User, 'user_id' | 'username' | 'email' | 'created_at'> & {
-    likes_count: bigint;
-  };
+// type MostLikedMedia = Pick<
+//   MediaItem,
+//   | 'media_id'
+//   | 'filename'
+//   | 'filesize'
+//   | 'media_type'
+//   | 'title'
+//   | 'description'
+//   | 'created_at'
+// > &
+//   Pick<User, 'user_id' | 'username' | 'email' | 'created_at'> & {
+//     likes_count: bigint;
+//   };
 
 // type gymnastics to get rid of user_level_id from User type and replace it with level_name from UserLevel type
 type UserWithLevel = Omit<User, 'user_level_id'> &
@@ -89,7 +93,7 @@ type UserWithNoPassword = Omit<UserWithLevel, 'password'>;
 
 type TokenContent = Pick<User, 'user_id'> & Pick<UserLevel, 'level_name'>;
 
-type MediaItemWithOwner = MediaItem & Pick<User, 'username'>;
+type MediaItemWithOwner = RecipeItem & Pick<User, 'username'>;
 
 // for upload server
 type FileInfo = {
@@ -100,7 +104,7 @@ type FileInfo = {
 export type {
   UserLevel,
   User,
-  MediaItem,
+  RecipeItem,
   Comment,
   Like,
   Rating,
@@ -108,7 +112,6 @@ export type {
   MediaItemTag,
   TagResult,
   UploadResult,
-  MostLikedMedia,
   UserWithLevel,
   UserWithNoPassword,
   TokenContent,
