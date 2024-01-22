@@ -65,18 +65,18 @@ CREATE TABLE Ratings (
     FOREIGN KEY (user_id) REFERENCES Users(user_id)
 );
 
--- CREATE TABLE Tags (
---     tag_id INT AUTO_INCREMENT PRIMARY KEY,
---     tag_name VARCHAR(50) NOT NULL
--- );
+CREATE TABLE Tags (
+    tag_id INT AUTO_INCREMENT PRIMARY KEY,
+    tag_name VARCHAR(50) NOT NULL
+);
 
--- CREATE TABLE MediaItemTags (
---     media_id INT NOT NULL,
---     tag_id INT NOT NULL,
---     PRIMARY KEY (media_id, tag_id),
---     FOREIGN KEY (media_id) REFERENCES MediaItems(media_id),
---     FOREIGN KEY (tag_id) REFERENCES Tags(tag_id)
--- );
+CREATE TABLE RecipeItemTags (
+    recipe_id INT NOT NULL,
+    tag_id INT NOT NULL,
+    PRIMARY KEY (recipe_id, tag_id),
+    FOREIGN KEY (recipe_id) REFERENCES RecipeItems(recipe_id),
+    FOREIGN KEY (tag_id) REFERENCES Tags(tag_id)
+);
 
 
 -- Insert the sample data
@@ -114,9 +114,9 @@ INSERT INTO Comments (recipe_id, user_id, comment_text) VALUES
 INSERT INTO Ratings (recipe_id, user_id, rating_value) VALUES
 (1, 1, 5);
 
--- INSERT INTO Tags (tag_name) VALUES ('Nature'), ('Video'), ('Documentary'), ('Landscape');
+INSERT INTO Tags (tag_name) VALUES ('Pääruoat'), ('Jälkiruoat'), ('Puurot'), ('Makeat leivonnaiset'), ('Suolaiset leivonlaiset');
 
--- INSERT INTO MediaItemTags (media_id, tag_id) VALUES
+-- INSERT INTO RecipeItemTags (recipe_id, tag_id) VALUES
 -- (1, 1),
 -- (1, 4),
 -- (2, 2),
