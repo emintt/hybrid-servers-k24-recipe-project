@@ -46,14 +46,14 @@ CREATE TABLE Comments (
     FOREIGN KEY (user_id) REFERENCES Users(user_id)
 );
 
--- CREATE TABLE Likes (
---     like_id INT AUTO_INCREMENT PRIMARY KEY,
---     recipe_id INT NOT NULL,
---     user_id INT NOT NULL,
---     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
---     FOREIGN KEY (recipe_id) REFERENCES RecipeItems(recipe_id),
---     FOREIGN KEY (user_id) REFERENCES Users(user_id)
--- );
+CREATE TABLE Likes (
+    like_id INT AUTO_INCREMENT PRIMARY KEY,
+    recipe_id INT NOT NULL,
+    user_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (recipe_id) REFERENCES RecipeItems(recipe_id),
+    FOREIGN KEY (user_id) REFERENCES Users(user_id)
+);
 
 CREATE TABLE Ratings (
     rating_id INT AUTO_INCREMENT PRIMARY KEY,

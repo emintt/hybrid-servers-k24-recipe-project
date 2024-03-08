@@ -70,7 +70,7 @@ const fetchRecipeById = async (id: number): Promise<RecipeItem | null> => {
                 CONCAT(?, filename) AS filename,
                 CONCAT(?, CONCAT(filename, "-thumb.png")) AS thumbnail
                 FROM RecipeItems
-                WHERE media_id=?`;
+                WHERE recipe_id=?`;
     const params = [uploadPath, uploadPath, id];
     const [rows] = await promisePool.execute<RowDataPacket[] & RecipeItem[]>(
       sql,
@@ -187,20 +187,20 @@ const deleteRecipe = async (
   try {
     await connection.beginTransaction();
 
-    await connection.execute('DELETE FROM Likes WHERE media_id = ?;', [id]);
+    await connection.execute('DELETE FROM Likes WHERE recipe_id = ?;', [id]);
 
-    await connection.execute('DELETE FROM Comments WHERE media_id = ?;', [id]);
+    await connection.execute('DELETE FROM Comments WHERE recipe_id = ?;', [id]);
 
-    await connection.execute('DELETE FROM Ratings WHERE media_id = ?;', [id]);
+    await connection.execute('DELETE FROM Ratings WHERE recipe_id = ?;', [id]);
 
     // ! user_id in SQL so that only the owner of the media item can delete it
     const [result] = await connection.execute<ResultSetHeader>(
-      'DELETE FROM RecipeItems WHERE media_id = ? and user_id = ?;',
+      'DELETE FROM RecipeItems WHERE recipe_id = ? and user_id = ?;',
       [id, user.user_id]
     );
 
     if (result.affectedRows === 0) {
-      return {message: 'Media not deleted'};
+      return {message: 'Recipe not deleted'};
     }
 
     // delete file from upload server
