@@ -4,7 +4,7 @@
   "description": " A basic starter for an express.js API with Typescript. Ilkka added gts",
   "main": "dist/src/index.js",
   "scripts": {
-    "start": "node dist/hybrid-media-api/src/index.js",
+    "start": "node dist/recipe-api-full/src/index.js",
     "dev": "nodemon src/index.ts",
     "build": "tsc",
     "postbuild": "npm run apidoc",
