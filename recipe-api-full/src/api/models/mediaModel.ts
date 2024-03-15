@@ -69,6 +69,8 @@ const postMedia = async (
                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
   const params = [user_id, filename, filesize, media_type, title, description,
     serving, cook_time, ingredients, instruction];
+  console.log('params', params);
+  console.log(sql);
   try {
     const result = await promisePool.execute<ResultSetHeader>(sql, params);
     const [rows] = await promisePool.execute<RowDataPacket[] & MediaItem[]>(

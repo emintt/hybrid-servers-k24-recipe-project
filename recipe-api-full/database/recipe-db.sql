@@ -28,7 +28,7 @@ CREATE TABLE MediaItems (
     media_type VARCHAR(255) NOT NULL,
     title VARCHAR(255) NOT NULL,
     description VARCHAR(255),
-    serving INT NOT NULL,
+    serving VARCHAR(255) NOT NULL,
     cook_time VARCHAR(255),
     ingredients TEXT NOT NULL,
     instruction TEXT NOT NULL,
