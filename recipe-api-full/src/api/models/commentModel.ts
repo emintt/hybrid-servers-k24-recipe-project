@@ -134,6 +134,7 @@ const updateComment = async (
       comment_id,
       user_id,
     ]);
+    // console.log(result);
     if (result.affectedRows === 0) {
       return null;
     }
@@ -153,14 +154,15 @@ const deleteComment = async (
   try {
     let sql = '';
     if (user_level === 'Admin') {
-      sql = 'DELETE FROM Comments WHERE id = ?';
+      sql = 'DELETE FROM Comments WHERE comment_id = ?';
     } else {
-      sql = 'DELETE FROM Comments WHERE id = ? AND user_id = ?';
+      sql = 'DELETE FROM Comments WHERE comment_id = ? AND user_id = ?';
     }
     const [result] = await promisePool.execute<ResultSetHeader>(sql, [
       id,
       user_id,
     ]);
+    console.log(id, user_id);
     if (result.affectedRows === 0) {
       return null;
     }

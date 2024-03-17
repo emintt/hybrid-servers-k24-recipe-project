@@ -134,6 +134,7 @@ const commentPut = async (
   next: NextFunction
 ) => {
   try {
+    console.log('req', req.params);
     const result = await updateComment(
       req.body.comment_text,
       Number(req.params.id),
