@@ -157,13 +157,13 @@ const deleteMedia = async (
       media_id,
     ]);
 
-    await connection.execute('DELETE FROM Ratings WHERE media_id = ?;', [
-      media_id,
-    ]);
+    // await connection.execute('DELETE FROM Ratings WHERE media_id = ?;', [
+    //   media_id,
+    // ]);
 
-    await connection.execute('DELETE FROM MediaItemTags WHERE media_id = ?;', [
-      media_id,
-    ]);
+    // await connection.execute('DELETE FROM MediaItemTags WHERE media_id = ?;', [
+    //   media_id,
+    // ]);
 
     let sql = '';
     if (level_name === 'Admin') {
