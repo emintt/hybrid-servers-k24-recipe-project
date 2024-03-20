@@ -251,14 +251,14 @@ const fetchMostCommentedMedia = async (): Promise<MediaItem[] | undefined> => {
   try {
     const [rows] = await promisePool.execute<RowDataPacket[] & MediaItem[]>(
       // 'SELECT * FROM `MostCommentedMedia`'
-      `SELECT mediaitems.* FROM mediaitems
+      `SELECT MediaItems.* FROM MediaItems
       JOIN (
         SELECT media_id
         FROM comments
         GROUP BY media_id
         ORDER BY COUNT(*) DESC
         LIMIT 4
-    ) AS top_media ON top_media.media_id = mediaitems.media_id;`
+    ) AS top_media ON top_media.media_id = MediaItems.media_id;`
       );
     if (rows.length === 0) {
       return undefined;
