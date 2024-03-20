@@ -70,7 +70,7 @@ const makeThumbnail = async (
       return;
     }
 
-    const src = path.join(__dirname, '..', 'uploads', req.file.filename);
+    const src = path.join(__dirname, '..',  '..',  '..', 'uploads', req.file.filename);
     console.log(src);
 
     if (!req.file.mimetype.includes('video')) {
@@ -85,6 +85,7 @@ const makeThumbnail = async (
     await getVideoThumbnail(src);
     next();
   } catch (error) {
+	  console.log(error);
     next(new CustomError('Thumbnail not created', 500));
   }
 };
