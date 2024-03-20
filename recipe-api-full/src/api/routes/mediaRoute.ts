@@ -44,6 +44,10 @@ router
     authenticate,
     body('title').optional().isString().escape(),
     body('description').optional().isString().escape(),
+    body('serving').optional().isString().escape(),
+    body('cook_time').optional().isString().escape(),
+    body('ingredients').optional().isString().escape(),
+    body('instruction').optional().isString().escape(),
     validationErrors,
     mediaPut
   )

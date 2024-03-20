@@ -6,7 +6,7 @@
  * @apiSuccess {Object[]} comments List of comments.
  * @apiSuccess {Number} comments.comment_id ID of the comment.
  * @apiSuccess {Number} comments.user_id ID of the user who commented.
- * @apiSuccess {String} comments.media_id ID of the media that was commented on.
+ * @apiSuccess {String} comments.media_id ID of the recipe that was commented on.
  * @apiSuccess {String} comments.comment_text Content of the comment.
  * @apiSuccess {created_at} comments.created_at Timestamp of when the comment was created.
  *
@@ -39,7 +39,7 @@
  * @apiHeader {String} Authorization Bearer token for authentication.
  *
  * @apiParam {String} comment_text Text of the comment.
- * @apiParam {Number} media_id ID of the media.
+ * @apiParam {Number} media_id ID of the media (recipe).
  *
  * @apiExample {json} Request-Example:
  *     POST /comments
@@ -52,7 +52,7 @@
  * @apiSuccess {Object} comment Posted comment details.
  * @apiSuccess {Number} comment.comment_id ID of the comment.
  * @apiSuccess {Number} comment.user_id ID of the user who commented.
- * @apiSuccess {String} comment.media_id ID of the media that was commented on.
+ * @apiSuccess {String} comment.media_id ID of the recipe that was commented on.
  * @apiSuccess {String} comment.content Content of the comment.
  * @apiSuccess {created_at} comment.created_at Timestamp of when the comment was created.
  *
@@ -87,7 +87,7 @@
  * @apiSuccess {Object[]} comments List of comments for the media.
  * @apiSuccess {Number} comments.comment_id ID of the comment.
  * @apiSuccess {Number} comments.user_id ID of the user who commented.
- * @apiSuccess {String} comment.media_id ID of the media that was commented on.
+ * @apiSuccess {String} comment.media_id ID of the recipe that was commented on.
  * @apiSuccess {String} comments.content Content of the comment.
  * @apiSuccess {created_at} comments.created_at Timestamp of when the comment was created.
  *
@@ -175,7 +175,7 @@
  *
  * @apiSuccess {Number} comment_id ID of the comment.
  * @apiSuccess {Number} user_id ID of the user who commented.
- * @apiSuccess {Number} media_id ID of the media that was commented on.
+ * @apiSuccess {Number} media_id ID of the recipe that was commented on.
  * @apiSuccess {String} content Content of the comment.
  * @apiSuccess {created_at} created_at Timestamp of when the comment was created.
  *
@@ -214,7 +214,7 @@
  *
  * @apiSuccess {Number} comment_id ID of the updated comment.
  * @apiSuccess {Number} user_id ID of the user who commented.
- * @apiSuccess {Number} media_id ID of the media that was commented on.
+ * @apiSuccess {Number} media_id ID of the recipe that was commented on.
  * @apiSuccess {String} content Updated content of the comment.
  * @apiSuccess {created_at} created_at Timestamp of when the comment was created.
  *

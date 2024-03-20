@@ -101,7 +101,7 @@ const mediaDelete = async (
 };
 
 const mediaPut = async (
-  req: Request<{id: string}, {}, Pick<MediaItem, 'title' | 'description'>>,
+  req: Request<{id: string}, {}, Pick<MediaItem, 'title' | 'description' | 'serving'| 'cook_time'| 'ingredients'| 'instruction'>>,
   res: Response<MediaResponse, {user: TokenContent}>,
   next: NextFunction
 ) => {
@@ -113,6 +113,10 @@ const mediaPut = async (
       res.locals.user.user_id,
       res.locals.user.level_name
     );
+    console.log(req.body,
+      id,
+      res.locals.user.user_id,
+      res.locals.user.level_name);
     if (media) {
       res.json({message: 'Media updated', media});
       return;
@@ -144,7 +148,7 @@ const mediaListMostLikedGet = async (
 
 const mediaListMostCommentedGet = async (
   req: Request,
-  res: Response<MediaItem>,
+  res: Response<MediaItem[]>,
   next: NextFunction
 ) => {
   try {

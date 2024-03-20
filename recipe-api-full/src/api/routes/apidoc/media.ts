@@ -59,11 +59,15 @@
  *
  * @apiHeader {String} Authorization Bearer token for authentication.
  *
- * @apiParam {String} title Title of the media.
- * @apiParam {String} [description] Description of the media (optional).
- * @apiParam {String} filename Filename of the media.
- * @apiParam {String} media_type Type of the media.
- * @apiParam {Number} filesize Size of the media file.
+ * @apiParam {String} title Title of the recipe.
+ * @apiParam {String} [description] Description of the recipe (optional).
+ * @apiParam {String} filename Filename of the recipe.
+ * @apiParam {String} media_type Type of the recipe.
+ * @apiParam {Number} filesize Size of the recipe file.
+ * @apiParam {String} serving Serving of the recipe.
+ * @apiParam {String} ingredients Ingredients of the recipe.
+ * @apiParam {String} cook_time Cook_time of the recipe.
+ * @apiParam {String} instruction Instruction of the recipe.
  *
  * @apiExample {json} Request-Example:
  *     {
@@ -71,18 +75,26 @@
  *       "description": "Example Description",
  *       "filename": "example.jpg",
  *       "media_type": "image/jpg",
- *       "filesize": 12345
+ *       "filesize": 12345,
+ *       "serving": "2 annosta";
+ *       "cook_time": "30 min";
+ *       "ingredients": "example ingredients";
+ *       "instruction": "example instruction";
  *     }
  *
- * @apiSuccess {Number} media_id ID of the media.
+ * @apiSuccess {Number} media_id ID of the recipe.
  * @apiSuccess {Number} user_id ID of the user who posted the media.
- * @apiSuccess {String} filename Filename of the media.
- * @apiSuccess {Number} filesize Size of the media file.
- * @apiSuccess {String} media_type Type of the media.
- * @apiSuccess {String} title Title of the media.
- * @apiSuccess {String} description Description of the media.
+ * @apiSuccess {String} filename Filename of the recipe.
+ * @apiSuccess {Number} filesize Size of the recipe file.
+ * @apiSuccess {String} media_type Type of the recipe.
+ * @apiSuccess {String} title Title of the recipe.
+ * @apiSuccess {String} description Description of the recipe.
+ * @apiSuccess {String} media.serving Serving of the recipe.
+ * @apiSuccess {String} media.ingredients Ingredients of the recipe.
+ * @apiSuccess {String} media.cook_time Cook_time of the recipe.
+ * @apiSuccess {String} media.instruction Instruction of the recipe.
  * @apiSuccess {String} created_at Timestamp when the media was created.
- * @apiSuccess {String} thumbnail Thumbnail of the media.
+ * @apiSuccess {String} thumbnail Thumbnail of the recipe.
  *
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
@@ -94,6 +106,10 @@
  *       "media_type": "image/jpg",
  *       "title": "Example Title",
  *       "description": "Example Description",
+ *       "serving": "2 annosta";
+ *       "cook_time": "30 min";
+ *       "ingredients": "example ingredients";
+ *       "instruction": "example instruction";
  *       "created_at": "2024-01-26T09:38:08.000Z",
  *       "thumbnail": "//localhost:3002/uploads/example-thumb.jpg"
  *     }
@@ -107,66 +123,28 @@
  *     }
  *
  */
+
 /**
- * @api {get} /media/mostliked Get Most Liked Media
- * @apiName GetMostLikedMedia
- * @apiGroup Media
- *
- * @apiHeader {String} Authorization Bearer token for authentication.
- *
- * @apiSuccess {Object[]} media Array of most liked media objects.
- * @apiSuccess {Number} media.media_id ID of the media.
- * @apiSuccess {Number} media.user_id ID of the user who posted the media.
- * @apiSuccess {String} media.filename Filename of the media.
- * @apiSuccess {Number} media.filesize Size of the media file.
- * @apiSuccess {String} media.media_type Type of the media.
- * @apiSuccess {String} media.title Title of the media.
- * @apiSuccess {String} media.description Description of the media.
- * @apiSuccess {String} media.created_at Timestamp when the media was created.
- * @apiSuccess {String} media.thumbnail Thumbnail of the media.
- *
- * @apiSuccessExample Success-Response:
- *     HTTP/1.1 200 OK
- *     [
- *       {
- *         "media_id": 1,
- *         "user_id": 1,
- *         "filename": "example.jpg",
- *         "filesize": 12345,
- *         "media_type": "image/jpg",
- *         "title": "Example Title",
- *         "description": "Example Description",
- *         "created_at": "2024-01-26T09:38:08.000Z",
- *         "thumbnail": "//localhost:3002/uploads/example-thumb.jpg"
- *       },
- *       ...
- *     ]
- *
- * @apiError MediaNotFound No media items found.
- *
- * @apiErrorExample Error-Response:
- *     HTTP/1.1 404 Not Found
- *     {
- *       "error": "No media found"
- *     }
- */
-/**
- * @api {get} /media/mostcommented Get Most Commented Media
+ * @api {get} /media/mostcommented Get Most Commented Recipe
  * @apiName GetMostCommentedMedia
  * @apiGroup Media
  *
  * @apiHeader {String} Authorization Bearer token for authentication.
  *
- * @apiSuccess {Object[]} media Array of most commented media objects.
- * @apiSuccess {Number} media.media_id ID of the media.
+ * @apiSuccess {Object[]} media Array of 4 most commented media objects.
+ * @apiSuccess {Number} media.media_id ID of the recipe.
  * @apiSuccess {Number} media.user_id ID of the user who posted the media.
- * @apiSuccess {String} media.filename Filename of the media.
- * @apiSuccess {Number} media.filesize Size of the media file.
- * @apiSuccess {String} media.media_type Type of the media.
- * @apiSuccess {String} media.title Title of the media.
- * @apiSuccess {String} media.description Description of the media.
+ * @apiSuccess {String} media.filename Filename of the recipe.
+ * @apiSuccess {Number} media.filesize Size of the recipe file.
+ * @apiSuccess {String} media.media_type Type of the recipe.
+ * @apiSuccess {String} media.title Title of the recipe.
+ * @apiSuccess {String} media.description Description of the recipe.
+ * @apiSuccess {String} media.serving Serving of the recipe.
+ * @apiSuccess {String} media.ingredients Ingredients of the recipe.
+ * @apiSuccess {String} media.cook_time Cook_time of the recipe.
+ * @apiSuccess {String} media.instruction Instruction of the recipe.
  * @apiSuccess {String} media.created_at Timestamp when the media was created.
- * @apiSuccess {String} media.thumbnail Thumbnail of the media.
+ * @apiSuccess {String} media.thumbnail Thumbnail of the recipe.
  *
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
@@ -179,6 +157,10 @@
  *         "media_type": "image/jpg",
  *         "title": "Example Title",
  *         "description": "Example Description",
+ *       "serving": "2 annosta";
+ *       "cook_time": "30 min";
+ *       "ingredients": "example ingredients";
+ *       "instruction": "example instruction";
  *         "created_at": "2024-01-26T09:38:08.000Z",
  *         "thumbnail": "//localhost:3002/uploads/example-thumb.jpg"
  *       },
@@ -193,51 +175,9 @@
  *       "error": "No media found"
  *     }
  */
+
 /**
- * @api {get} /media/highestrated Get Highest Rated Media
- * @apiName GetHighestRatedMedia
- * @apiGroup Media
- *
- * @apiHeader {String} Authorization Bearer token for authentication.
- *
- * @apiSuccess {Object[]} media Array of highest rated media objects.
- * @apiSuccess {Number} media.media_id ID of the media.
- * @apiSuccess {Number} media.user_id ID of the user who posted the media.
- * @apiSuccess {String} media.filename Filename of the media.
- * @apiSuccess {Number} media.filesize Size of the media file.
- * @apiSuccess {String} media.media_type Type of the media.
- * @apiSuccess {String} media.title Title of the media.
- * @apiSuccess {String} media.description Description of the media.
- * @apiSuccess {String} media.created_at Timestamp when the media was created.
- * @apiSuccess {String} media.thumbnail Thumbnail of the media.
- *
- * @apiSuccessExample Success-Response:
- *     HTTP/1.1 200 OK
- *     [
- *       {
- *         "media_id": 1,
- *         "user_id": 1,
- *         "filename": "example.jpg",
- *         "filesize": 12345,
- *         "media_type": "image/jpg",
- *         "title": "Example Title",
- *         "description": "Example Description",
- *         "created_at": "2024-01-26T09:38:08.000Z",
- *         "thumbnail": "//localhost:3002/uploads/example-thumb.jpg"
- *       },
- *       ...
- *     ]
- *
- * @apiError MediaNotFound No media items found.
- *
- * @apiErrorExample Error-Response:
- *     HTTP/1.1 404 Not Found
- *     {
- *       "error": "No media found"
- *     }
- */
-/**
- * @api {get} /media/:id Get Media
+ * @api {get} /media/:id Get Recipe
  * @apiName GetMedia
  * @apiGroup Media
  *
@@ -246,15 +186,19 @@
  * @apiParam {Number} id Media's unique ID.
  *
  * @apiSuccess {Object[]} media Array of media objects.
- * @apiSuccess {Number} media.media_id ID of the media.
+ * @apiSuccess {Number} media.media_id ID of the recipe.
  * @apiSuccess {Number} media.user_id ID of the user who posted the media.
- * @apiSuccess {String} media.filename Filename of the media.
- * @apiSuccess {Number} media.filesize Size of the media file.
- * @apiSuccess {String} media.media_type Type of the media.
- * @apiSuccess {String} media.title Title of the media.
- * @apiSuccess {String} media.description Description of the media.
+ * @apiSuccess {String} media.filename Filename of the recipe.
+ * @apiSuccess {Number} media.filesize Size of the recipe file.
+ * @apiSuccess {String} media.media_type Type of the recipe.
+ * @apiSuccess {String} media.title Title of the recipe.
+ * @apiSuccess {String} media.description Description of the recipe.
+ * @apiSuccess {String} media.serving Serving of the recipe.
+ * @apiSuccess {String} media.ingredients Ingredients of the recipe.
+ * @apiSuccess {String} media.cook_time Cook_time of the recipe.
+ * @apiSuccess {String} media.instruction Instruction of the recipe.
  * @apiSuccess {String} media.created_at Timestamp when the media was created.
- * @apiSuccess {String} media.thumbnail Thumbnail of the media.
+ * @apiSuccess {String} media.thumbnail Thumbnail of the recipe.
  *
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
@@ -267,6 +211,10 @@
  *         "media_type": "image/jpg",
  *         "title": "Example Title",
  *         "description": "Example Description",
+ *         "serving": "2 annosta";
+ *         "cook_time": "30 min";
+ *         "ingredients": "example ingredients";
+ *         "instruction": "example instruction";
  *         "created_at": "2024-01-26T09:38:08.000Z",
  *         "thumbnail": "//localhost:3002/uploads/example-thumb.jpg"
  *       },
@@ -289,9 +237,12 @@
  * @apiHeader {String} Authorization Bearer token for authentication.
  *
  * @apiParam {Number} id Media's unique ID.
- * @apiParam {String} [title] Title of the media (optional).
- * @apiParam {String} [description] Description of the media (optional).
- *
+ * @apiParam {String} [title] Title of the recipe (optional).
+ * @apiParam {String} [description] Description of the recipe (optional).
+ * @apiParam {String} [serving] Serving of the recipe.
+ * @apiParam {String} [ingredients] Ingredients of the recipe.
+ * @apiParam {String} [cook_time] Cook_time of the recipe.
+ * @apiParam {String} [instruction] Instruction of the recipe.
  *
  * @apiExample {json} Request-Example:
  *     {
@@ -300,15 +251,19 @@
  *     }
  *
  * @apiSuccess {Object} media Updated media object.
- * @apiSuccess {Number} media.media_id ID of the media.
+ * @apiSuccess {Number} media.media_id ID of the recipe.
  * @apiSuccess {Number} media.user_id ID of the user who posted the media.
- * @apiSuccess {String} media.filename Filename of the media.
- * @apiSuccess {Number} media.filesize Size of the media file.
- * @apiSuccess {String} media.media_type Type of the media.
- * @apiSuccess {String} media.title Title of the media.
- * @apiSuccess {String} media.description Description of the media.
+ * @apiSuccess {String} media.filename Filename of the recipe.
+ * @apiSuccess {Number} media.filesize Size of the recipe file.
+ * @apiSuccess {String} media.media_type Type of the recipe.
+ * @apiSuccess {String} media.title Title of the recipe.
+ * @apiSuccess {String} media.description Description of the recipe.
+ * @apiSuccess {String} media.serving Serving of the recipe.
+ * @apiSuccess {String} media.ingredients Ingredients of the recipe.
+ * @apiSuccess {String} media.cook_time Cook_time of the recipe.
+ * @apiSuccess {String} media.instruction Instruction of the recipe.
  * @apiSuccess {String} media.created_at Timestamp when the media was created.
- * @apiSuccess {String} media.thumbnail Thumbnail of the media.
+ * @apiSuccess {String} media.thumbnail Thumbnail of the recipe.
  *
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
@@ -320,6 +275,10 @@
  *       "media_type": "image/jpg",
  *       "title": "Updated Title",
  *       "description": "Updated Description",
+ *       "serving": "2 annosta";
+ *       "cook_time": "30 min";
+ *       "ingredients": "example ingredients";
+ *       "instruction": "example instruction";
  *       "created_at": "2024-01-26T09:38:08.000Z",
  *       "thumbnail": "//localhost:3002/uploads/example-thumb.jpg"
  *     }
