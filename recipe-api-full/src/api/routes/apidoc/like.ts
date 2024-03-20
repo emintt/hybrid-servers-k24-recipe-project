@@ -6,7 +6,7 @@
  * @apiSuccess {Object[]} likes List of likes.
  * @apiSuccess {Number} likes.like_id ID of the like.
  * @apiSuccess {Number} likes.user_id ID of the user who liked.
- * @apiSuccess {Number} likes.media_id ID of the media that was liked.
+ * @apiSuccess {Number} likes.media_id ID of the recipe that was liked.
  * @apiSuccess {created_at} likes.created_at Timestamp of when the like was created.
  *
  * @apiSuccessExample {json} Success-Response:
@@ -36,7 +36,7 @@
  *
  * @apiHeader {String} Authorization Bearer token for authentication.
  *
- * @apiParam {Number} media_id ID of the media to be liked.
+ * @apiParam {Number} media_id ID of the recipe to be liked.
  *
  * @apiExample {json} Request-Example:
  *     POST /likes
@@ -71,7 +71,7 @@
  * @apiSuccess {Object[]} likes List of likes.
  * @apiSuccess {Number} likes.like_id ID of the like.
  * @apiSuccess {Number} likes.user_id ID of the user who liked.
- * @apiSuccess {Number} likes.media_id ID of the media that was liked.
+ * @apiSuccess {Number} likes.media_id ID of the recipe that was liked.
  * @apiSuccess {created_at} likes.created_at Timestamp of when the like was created.
  *
  * @apiSuccessExample {json} Success-Response:
@@ -104,7 +104,7 @@
  * @apiSuccess {Object[]} likes List of likes.
  * @apiSuccess {Number} likes.like_id ID of the like.
  * @apiSuccess {Number} likes.user_id ID of the user who liked.
- * @apiSuccess {Number} likes.media_id ID of the media that was liked.
+ * @apiSuccess {Number} likes.media_id ID of the recipe that was liked.
  * @apiSuccess {created_at} likes.created_at Timestamp of when the like was created.
  *
  * @apiSuccessExample {json} Success-Response:

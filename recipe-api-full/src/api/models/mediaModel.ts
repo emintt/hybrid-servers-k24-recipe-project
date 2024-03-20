@@ -88,7 +88,7 @@ const postMedia = async (
 };
 
 const putMedia = async (
-  media: Pick<MediaItem, 'title' | 'description'>,
+  media: Pick<MediaItem, 'title' | 'description'| 'serving'| 'cook_time'| 'ingredients'| 'instruction'>,
   id: number,
   user_id: number,
   user_level: UserLevel['level_name']
@@ -242,20 +242,33 @@ const fetchMostLikedMedia = async (): Promise<MediaItem | undefined> => {
   }
 };
 
-const fetchMostCommentedMedia = async (): Promise<MediaItem | undefined> => {
+const fetchMostCommentedMedia = async (): Promise<MediaItem[] | undefined> => {
   try {
     const [rows] = await promisePool.execute<RowDataPacket[] & MediaItem[]>(
-      'SELECT * FROM `MostCommentedMedia`'
+      // 'SELECT * FROM `MostCommentedMedia`'
+      `SELECT mediaitems.*
+      FROM mediaitems
+       JOIN (
+          SELECT media_id
+          FROM comments
+          GROUP BY media_id
+          ORDER BY COUNT(*) DESC
+          LIMIT 4
+      ) AS top_media ON top_media.media_id = mediaitems.media_id;`
     );
     if (rows.length === 0) {
       return undefined;
     }
-    // add server url to filename because it can't be added in the SQL view
-    rows[0].filename = process.env.UPLOAD_URL + '/uploads/' + rows[0].filename;
-    // add thumbnail to object for the same reason
-    rows[0].thumbnail =
-      process.env.UPLOAD_URL + '/uploads/' + rows[0].filename + '-thumb.png';
-    return rows[0];
+    rows.forEach((row) => {
+      // add server url to filename because it can't be added in the SQL view
+      row.filename = process.env.UPLOAD_URL  + row.filename;
+      // add thumbnail to object for the same reason
+      row.thumbnail =
+        row.filename + '-thumb.png';
+      console.log(row.thumbnail);
+    });
+
+    return rows;
   } catch (e) {
     console.error('getMostCommentedMedia error', (e as Error).message);
     throw new Error((e as Error).message);
