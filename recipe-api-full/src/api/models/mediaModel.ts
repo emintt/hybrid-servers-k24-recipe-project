@@ -254,7 +254,7 @@ const fetchMostCommentedMedia = async (): Promise<MediaItem[] | undefined> => {
       `SELECT MediaItems.* FROM MediaItems
       JOIN (
         SELECT media_id
-        FROM comments
+        FROM Comments
         GROUP BY media_id
         ORDER BY COUNT(*) DESC
         LIMIT 4
